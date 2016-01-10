@@ -1,0 +1,22 @@
+; sample macro of Tera Term
+;
+; File: ssh2login.ttl
+; Description: auto login with SSH2 protocol
+; Environment: generic
+; Update: 2016/01/10
+; Author: akai.tsuki
+
+USERNAME = 'vagrant'
+HOSTNAME = '192.168.2.226'
+
+PASSFILE = 'password.dat'
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+getpassword PASSFILE USERNAME PASSWORD
+
+msg = HOSTNAME
+strconcat msg ':22 /ssh /auth=password /user='
+strconcat msg USERNAME
+strconcat msg ' /passwd='
+strconcat msg PASSWORD
+
+connect msg
