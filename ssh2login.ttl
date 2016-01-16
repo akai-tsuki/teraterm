@@ -10,6 +10,7 @@ USERNAME = 'vagrant'
 HOSTNAME = '192.168.2.226'
 
 PASSFILE = 'password.dat'
+SETTING_FILE = ''
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 getpassword PASSFILE USERNAME PASSWORD
 
