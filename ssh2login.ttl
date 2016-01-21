@@ -10,8 +10,20 @@ USERNAME = 'vagrant'
 HOSTNAME = '192.168.2.226'
 
 PASSFILE = 'password.dat'
-SETTING_FILE = ''
+
+INI_DIR  = '\'
+INI_FILE = 'TERATERM.INI'
+
+LOG_DIR  = '\log\'
+LOG_FILE = '%Y%m%d_%H%M%S_&h.log'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+getdir MACRO_DIR
+
+;; ini file path
+INI_FILE_PATH = MACRO_DIR
+strconcat INI_FILE_PATH INI_DIR
+strconcat INI_FILE_PATH INI_FILE
+
 getpassword PASSFILE USERNAME PASSWORD
 
 msg = HOSTNAME
@@ -19,5 +31,21 @@ strconcat msg ':22 /ssh /auth=password /user='
 strconcat msg USERNAME
 strconcat msg ' /passwd='
 strconcat msg PASSWORD
+strconcat msg ' /F='
+strconcat msg INI_FILE_PATH
 
 connect msg
+
+timeout = 10
+wait '$' '#'
+if result = 0 then
+  end
+endif
+
+;; log file path
+LOG_FILE_PATH = MACRO_DIR
+Strconcat LOG_FILE_PATH LOG_DIR
+Strconcat LOG_FILE_PATH LOG_FILE
+
+;; start log
+logopen LOG_FILE_PATH 0 1 1 0 1
