@@ -1,0 +1,66 @@
+; sample macro of Tera Term
+;
+; File: pm01_forwarding.ttl
+; Description: auto login with SSH2 protocol
+; Environment: generic
+; Update: 2020/04/29
+; Author: akai.tsuki
+
+USERNAME = 'root'
+PASSWORD = '****'
+HOSTNAME = '192.168.1.201'
+PORT     = '22'
+
+INI_DIR  = '\'
+INI_FILE = 'TERATERM.INI'
+
+LOG_DIR  = '\log\'
+LOG_FILE = '%Y%m%d_%H%M%S_&h.log'
+
+;;SSH Forwarding
+svr1 = '10022:192.168.122.62:22'
+svr2 = '10023:192.168.122.30:22'
+svr3 = '10024:192.168.122.11:22'
+
+sprintf2 svr '%s,%s,%s' svr1 svr2 svr3
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+getdir MACRO_DIR
+
+;; ini file path
+INI_FILE_PATH = MACRO_DIR
+strconcat INI_FILE_PATH INI_DIR
+strconcat INI_FILE_PATH INI_FILE
+
+msg = HOSTNAME
+strconcat msg ':'
+strconcat msg PORT
+strconcat msg ' /ssh /auth=password /user='
+strconcat msg USERNAME
+strconcat msg ' /passwd='
+strconcat msg PASSWORD
+; strconcat msg ' /F='
+; strconcat msg INI_FILE_PATH
+
+strconcat msg ' /ssh-L'
+strconcat msg svr
+
+connect msg
+
+timeout = 10
+wait '$' '#'
+if result = 0 then
+  end
+endif
+
+;;  ;; log file path
+;;  LOG_FILE_PATH = MACRO_DIR
+;;  Strconcat LOG_FILE_PATH LOG_DIR
+;;  Strconcat LOG_FILE_PATH LOG_FILE
+;;  
+;;  ;; start log
+;;  logopen LOG_FILE_PATH 0 1 1 0 1
+;;  
+;;  ;; move terminal
+;;  dispstr #$1B"[3;698;0t"
+

@@ -1,0 +1,55 @@
+; sample macro of Tera Term
+;
+; File: vm01_10022.ttl
+; Description: auto login with SSH2 protocol
+; Environment: generic
+; Update: 2020/04/29
+; Author: akai.tsuki
+
+USERNAME = 'root'
+PASSWORD = '****'
+HOSTNAME = 'localhost'
+PORT     = '10022'
+
+INI_DIR  = '\'
+INI_FILE = 'TERATERM_vm.INI'
+
+LOG_DIR  = '\log\'
+LOG_FILE = '%Y%m%d_%H%M%S_&h.log'
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+getdir MACRO_DIR
+
+;; ini file path
+INI_FILE_PATH = MACRO_DIR
+strconcat INI_FILE_PATH INI_DIR
+strconcat INI_FILE_PATH INI_FILE
+
+msg = HOSTNAME
+strconcat msg ':'
+strconcat msg PORT
+strconcat msg ' /ssh /auth=password /user='
+strconcat msg USERNAME
+strconcat msg ' /passwd='
+strconcat msg PASSWORD
+strconcat msg ' /F='
+strconcat msg INI_FILE_PATH
+
+connect msg
+
+timeout = 10
+wait '$' '#'
+if result = 0 then
+  end
+endif
+
+;;  ;; log file path
+;;  LOG_FILE_PATH = MACRO_DIR
+;;  Strconcat LOG_FILE_PATH LOG_DIR
+;;  Strconcat LOG_FILE_PATH LOG_FILE
+;;  
+;;  ;; start log
+;;  logopen LOG_FILE_PATH 0 1 1 0 1
+;;  
+;;  ;; move terminal
+;;  dispstr #$1B"[3;698;0t"
+
